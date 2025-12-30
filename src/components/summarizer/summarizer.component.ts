@@ -6,6 +6,7 @@ import { GeminiService } from '../../services/gemini.service';
 
 @Component({
   selector: 'app-summarizer',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './summarizer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

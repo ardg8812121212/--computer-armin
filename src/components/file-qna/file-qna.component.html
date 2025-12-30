@@ -18,7 +18,10 @@
           </label>
           <input id="file-upload" type="file" class="hidden" (change)="onFileChange($event)" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt">
           @if (fileError()) {
-            <p class="mt-4 text-sm text-red-400">{{ fileError() }}</p>
+            <div class="mt-4 bg-red-900/80 border border-red-500 text-red-200 px-4 py-3 rounded-lg text-sm" role="alert">
+              <strong class="font-bold">خطا: </strong>
+              <span>{{ fileError() }}</span>
+            </div>
           }
         </div>
       </div>

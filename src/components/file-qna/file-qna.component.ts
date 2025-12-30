@@ -6,6 +6,7 @@ import { GeminiService, ChatMessage, FilePart } from '../../services/gemini.serv
 
 @Component({
   selector: 'app-file-qna',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './file-qna.component.html',
   styleUrls: ['./file-qna.component.css'],
@@ -38,7 +39,7 @@ export class FileQnaComponent {
     const file = input.files[0];
     
     if (file.size > 10 * 1024 * 1024) { // 10 MB limit
-      this.fileError.set('حجم فایل نباید بیشتر از ۱۰ مگابایت باشد.');
+      this.fileError.set('حجم فایل بیش از حد مجاز است. لطفاً فایلی کوچکتر از ۱۰ مگابایت انتخاب کنید.');
       return;
     }
 

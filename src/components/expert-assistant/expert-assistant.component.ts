@@ -13,6 +13,7 @@ interface Expert {
 
 @Component({
   selector: 'app-expert-assistant',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './expert-assistant.component.html',
   styleUrls: ['./expert-assistant.component.css'],

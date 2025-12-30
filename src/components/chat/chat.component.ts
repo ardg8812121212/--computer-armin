@@ -6,6 +6,7 @@ import { GeminiService, ChatMessage } from '../../services/gemini.service';
 
 @Component({
   selector: 'app-chat',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],

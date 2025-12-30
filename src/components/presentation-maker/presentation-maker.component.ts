@@ -8,6 +8,7 @@ declare var PptxGenJS: any;
 
 @Component({
   selector: 'app-presentation-maker',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './presentation-maker.component.html',
   styleUrls: ['./presentation-maker.component.css'],

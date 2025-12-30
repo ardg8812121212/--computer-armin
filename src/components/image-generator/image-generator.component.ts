@@ -6,6 +6,7 @@ import { GeminiService } from '../../services/gemini.service';
 
 @Component({
   selector: 'app-image-generator',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './image-generator.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

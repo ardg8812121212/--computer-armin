@@ -13,6 +13,7 @@ type ActiveTab = 'chat' | 'image' | 'summarizer' | 'file-qna' | 'presentation' |
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
