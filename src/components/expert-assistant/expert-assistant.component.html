@@ -1,0 +1,121 @@
+
+@if (apiKeyError()) {
+  <div class="bg-red-900/80 backdrop-blur-sm border border-red-500 text-red-200 px-4 py-3 rounded-lg relative" role="alert">
+    <strong class="font-bold">خطای پیکربندی!</strong>
+    <span class="block sm:inline">{{ apiKeyError() }}</span>
+  </div>
+} @else {
+  @if (!selectedExpert()) {
+    <!-- Expert Selection View -->
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-black/30 backdrop-blur-lg rounded-lg shadow-2xl p-6 text-center border border-white/10">
+        <h2 class="text-2xl font-bold text-cyan-400 mb-2">دستیار متخصص</h2>
+        <p class="text-gray-300 mb-8">یک متخصص را برای شروع گفتگو انتخاب کنید.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (expert of experts; track expert.id) {
+            <button (click)="selectExpert(expert)" class="bg-gray-800/50 hover:bg-gray-700/70 p-6 rounded-lg text-center transition-all duration-300 ease-in-out transform hover:-translate-y-1 border border-white/10 hover:border-cyan-400/50">
+              <span class="material-symbols-outlined text-5xl text-cyan-400">{{ expert.icon }}</span>
+              <h3 class="mt-4 text-xl font-semibold text-gray-100">{{ expert.name }}</h3>
+              <p class="mt-2 text-sm text-gray-400">{{ expert.description }}</p>
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- Chat View -->
+    <div class="flex flex-col h-[calc(100vh-250px)] max-w-4xl mx-auto bg-black/30 backdrop-blur-lg rounded-lg shadow-2xl overflow-hidden border border-white/10">
+      <div class="p-4 bg-black/20 border-b border-white/10 flex justify-between items-center">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="material-symbols-outlined text-cyan-400">{{ selectedExpert()?.icon }}</span>
+          <span class="font-bold text-gray-200 truncate">چت با {{ selectedExpert()?.name }}</span>
+        </div>
+        <button (click)="goBack()" class="text-gray-400 hover:text-white transition-colors flex-shrink-0 flex items-center gap-1">
+          <span class="text-sm">بازگشت</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+
+      <div #chatContainer class="flex-grow p-6 overflow-y-auto space-y-6">
+        @if (messages().length === 0) {
+          <div class="text-center text-gray-400">
+            <p class="text-lg">گفتگو را شروع کنید.</p>
+            <p>سوال خود را از {{ selectedExpert()?.name }} بپرسید.</p>
+          </div>
+        }
+        @for (message of messages(); track message.id) {
+          <div class="flex items-start gap-3 chat-bubble" [class.justify-end]="message.role === 'user'">
+            @if(message.role === 'user') {
+                <button (click)="toggleEdit(message.id)" class="mt-2 text-gray-400 hover:text-cyan-400 transition-colors p-1 shrink-0">
+                    <span class="material-symbols-outlined text-base">edit</span>
+                </button>
+            }
+            <div 
+              class="max-w-lg lg:max-w-xl px-5 py-3 rounded-2xl w-full" 
+              [class.bg-cyan-600]="message.role === 'user'" 
+              [class.text-white]="message.role === 'user'"
+              [class.bg-gray-900/80]="message.role === 'model'"
+              [class.text-gray-200]="message.role === 'model'"
+            >
+              @if(message.isEditing) {
+                <textarea #editTextarea class="w-full bg-transparent border-b border-white/50 focus:outline-none resize-none" rows="3" (keydown.enter)="saveEdit(message.id, editTextarea.value); $event.preventDefault()">{{message.text}}</textarea>
+                <div class="text-right mt-2">
+                    <button (click)="saveEdit(message.id, editTextarea.value)" class="text-xs bg-white/20 px-2 py-1 rounded">ذخیره</button>
+                    <button (click)="toggleEdit(message.id)" class="text-xs mr-2">لغو</button>
+                </div>
+              } @else {
+                <p class="whitespace-pre-wrap">{{ message.text }}</p>
+              }
+
+              @if(message.role === 'model' && !message.explanation) {
+                <div class="mt-3 pt-3 border-t border-white/10 text-right">
+                  <button (click)="getExplanation(message)" [disabled]="message.isLoadingExplanation" class="text-xs text-cyan-300 hover:text-cyan-200 disabled:text-gray-400 disabled:cursor-wait transition-colors">
+                    @if(message.isLoadingExplanation) {
+                      <span>در حال دریافت توضیحات...</span>
+                    } @else {
+                      <span>نمایش مراحل</span>
+                    }
+                  </button>
+                </div>
+              }
+              @if(message.explanation) {
+                <div class="mt-4 pt-3 border-t border-dashed border-white/20">
+                    <h4 class="font-bold text-sm mb-2 text-cyan-200">توضیح گام به گام:</h4>
+                    <p class="whitespace-pre-wrap text-sm text-gray-300">{{ message.explanation }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        }
+        @if (isLoading()) {
+          <div class="flex justify-start">
+              <div class="bg-gray-900/80 px-5 py-3 rounded-2xl flex items-center space-x-3 space-x-reverse">
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot" style="animation-delay: 0.2s;"></div>
+                  <div class="typing-dot" style="animation-delay: 0.4s;"></div>
+              </div>
+          </div>
+        }
+      </div>
+      <div class="p-4 bg-black/30 border-t border-white/10">
+        <form (submit)="sendMessage()" class="flex items-center gap-4">
+          <input
+            type="text"
+            [(ngModel)]="currentMessage"
+            name="message"
+            [placeholder]="'از ' + selectedExpert()?.name + ' بپرسید...'"
+            class="flex-grow bg-gray-900/70 text-gray-200 border border-white/20 rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+            [disabled]="isLoading()"
+          />
+          <button
+            type="submit"
+            class="bg-cyan-600 text-white rounded-full p-3 hover:bg-cyan-500 disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors duration-200"
+            [disabled]="isLoading() || currentMessage().trim() === ''"
+          >
+            <span class="material-symbols-outlined">send</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  }
+}

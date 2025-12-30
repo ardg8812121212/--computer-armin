@@ -1,0 +1,32 @@
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #9ca3af; /* gray-400 */
+    border-radius: 50%;
+    animation: typing-animation 1.2s infinite ease-in-out;
+}
+
+@keyframes typing-animation {
+    0%, 60%, 100% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.5);
+    }
+}
+
+.chat-bubble {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

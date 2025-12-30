@@ -1,0 +1,105 @@
+
+<div class="main-background">
+  <div class="flex flex-col min-h-screen">
+    <header class="bg-black/30 backdrop-blur-lg shadow-lg p-4 text-center border-b border-white/10">
+      <h1 class="text-3xl font-bold text-cyan-400">Armin AI</h1>
+      <p class="text-gray-300 mt-1">"آموزش هوشمند برای ذهن‌های ایرانی"</p>
+    </header>
+
+    <nav class="flex flex-wrap justify-center bg-black/30 backdrop-blur-lg border-b border-t border-white/10">
+      <button
+        (click)="selectTab('chat')"
+        [class.bg-cyan-600]="activeTab() === 'chat'"
+        [class.text-white]="activeTab() === 'chat'"
+        class="flex items-center gap-2 py-3 px-6 text-gray-300 hover:bg-cyan-700 hover:text-white transition-colors duration-200"
+      >
+        <span class="material-symbols-outlined">chat</span>
+        <span>چت با آرمین</span>
+      </button>
+      <button
+        (click)="selectTab('expert')"
+        [class.bg-cyan-600]="activeTab() === 'expert'"
+        [class.text-white]="activeTab() === 'expert'"
+        class="flex items-center gap-2 py-3 px-6 text-gray-300 hover:bg-cyan-700 hover:text-white transition-colors duration-200"
+      >
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span>دستیار متخصص</span>
+      </button>
+      <button
+        (click)="selectTab('image')"
+        [class.bg-cyan-600]="activeTab() === 'image'"
+        [class.text-white]="activeTab() === 'image'"
+        class="flex items-center gap-2 py-3 px-6 text-gray-300 hover:bg-cyan-700 hover:text-white transition-colors duration-200"
+      >
+        <span class="material-symbols-outlined">palette</span>
+        <span>خلق تصویر</span>
+      </button>
+      <button
+        (click)="selectTab('summarizer')"
+        [class.bg-cyan-600]="activeTab() === 'summarizer'"
+        [class.text-white]="activeTab() === 'summarizer'"
+        class="flex items-center gap-2 py-3 px-6 text-gray-300 hover:bg-cyan-700 hover:text-white transition-colors duration-200"
+      >
+        <span class="material-symbols-outlined">summarize</span>
+        <span>خلاصه‌ساز متن</span>
+      </button>
+      <button
+        (click)="selectTab('file-qna')"
+        [class.bg-cyan-600]="activeTab() === 'file-qna'"
+        [class.text-white]="activeTab() === 'file-qna'"
+        class="flex items-center gap-2 py-3 px-6 text-gray-300 hover:bg-cyan-700 hover:text-white transition-colors duration-200"
+      >
+        <span class="material-symbols-outlined">description</span>
+        <span>پرسش از فایل</span>
+      </button>
+      <button
+        (click)="selectTab('presentation')"
+        [class.bg-cyan-600]="activeTab() === 'presentation'"
+        [class.text-white]="activeTab() === 'presentation'"
+        class="flex items-center gap-2 py-3 px-6 text-gray-300 hover:bg-cyan-700 hover:text-white transition-colors duration-200"
+      >
+        <span class="material-symbols-outlined">slideshow</span>
+        <span>پاورپوینت ساز</span>
+      </button>
+      <button
+        (click)="selectTab('settings')"
+        [class.bg-cyan-600]="activeTab() === 'settings'"
+        [class.text-white]="activeTab() === 'settings'"
+        class="flex items-center gap-2 py-3 px-6 text-gray-300 hover:bg-cyan-700 hover:text-white transition-colors duration-200"
+      >
+        <span class="material-symbols-outlined">settings</span>
+        <span>تنظیمات</span>
+      </button>
+    </nav>
+
+    <main class="flex-grow container mx-auto p-4 md:p-6 lg:p-8">
+      @switch (activeTab()) {
+        @case ('chat') {
+          <app-chat />
+        }
+        @case ('expert') {
+          <app-expert-assistant />
+        }
+        @case ('image') {
+          <app-image-generator />
+        }
+        @case ('summarizer') {
+          <app-summarizer />
+        }
+        @case ('file-qna') {
+          <app-file-qna />
+        }
+        @case ('presentation') {
+          <app-presentation-maker />
+        }
+        @case ('settings') {
+          <app-settings />
+        }
+      }
+    </main>
+
+    <footer class="bg-black/30 backdrop-blur-lg text-center p-4 mt-8 border-t border-white/10">
+      <p class="text-gray-400 text-sm">طراحی و توسعه توسط آرمین دهقان</p>
+    </footer>
+  </div>
+</div>
